@@ -1,0 +1,15 @@
+
+{
+  "networks": {
+      "mainnet": {
+              "contracts": {
+                "_0xbitcointoken": {"name":"PoWAdvCoinToken", "blockchain_address":"0x1a136ae98b49b92841562b6574d1f3f5b0044e4c"}
+              }
+            },
+      "testnet": {
+              "contracts": {
+                "_0xbitcointoken": {"name":"PoWAdvCoinToken", "blockchain_address":"0x91ebca93ee4e9c1aa54e72c69d9577b8df06c3ce"}
+              }
+            } 
+    }
+}

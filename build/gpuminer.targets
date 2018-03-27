@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="cuda_on_linux">
+      <Targets>_cuda_on_linux</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="cuda_on_linux">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(cuda_on_linuxAfterTargets)" BeforeTargets="$(cuda_on_linuxBeforeTargets)" Condition="'@(cuda_on_linux)' != ''" DependsOnTargets="$(cuda_on_linuxDependsOn);Computecuda_on_linuxOutput" Inputs="%(cuda_on_linux.Identity);%(cuda_on_linux.AdditionalDependencies);$(MSBuildProjectFile)" Name="_cuda_on_linux" Outputs="%(cuda_on_linux.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <cuda_on_linux Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(cuda_on_linux)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <cuda_on_linux_inputs Include="%(cuda_on_linux.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <cuda_on_linux_tlog Condition="'%(cuda_on_linux.Outputs)' != '' and '%(cuda_on_linux.ExcludedFromBuild)' != 'true'" Include="%(cuda_on_linux.Outputs)">
+        <Source>@(cuda_on_linux, &apos;|&apos;)</Source>
+        <Inputs>@(cuda_on_linux_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </cuda_on_linux_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(cuda_on_linux.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(cuda_on_linux_tlog)' != '' and '%(cuda_on_linux_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(cuda_on_linux_tlog.Source);@(cuda_on_linux_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(cuda_on_linux_tlog)' != '' and '%(cuda_on_linux_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(cuda_on_linux_tlog.Source);%(cuda_on_linux_tlog.Inputs)"/>
+    <cuda_on_linux AdditionalOptions="%(cuda_on_linux.AdditionalOptions)" CommandLineTemplate="%(cuda_on_linux.CommandLineTemplate)" Condition="'@(cuda_on_linux)' != '' and '%(cuda_on_linux.ExcludedFromBuild)' != 'true'" EchoOff="true" Inputs="%(cuda_on_linux.Identity)" StandardErrorImportance="High" StandardOutputImportance="High"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computecuda_on_linuxOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computecuda_on_linuxOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(cuda_on_linux)' != ''" Name="Computecuda_on_linuxOutput">
+    <ItemGroup>
+      <cuda_on_linuxDirsToMake Condition="'@(cuda_on_linux)' != '' and '%(cuda_on_linux.ExcludedFromBuild)' != 'true'" Include="%(cuda_on_linux.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(cuda_on_linuxDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(cuda_on_linuxDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(cuda_on_linuxDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(cuda_on_linuxDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

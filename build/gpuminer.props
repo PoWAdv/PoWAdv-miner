@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(cuda_on_linuxBeforeTargets)' == '' and '$(cuda_on_linuxAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <cuda_on_linuxBeforeTargets>Midl</cuda_on_linuxBeforeTargets>
+    <cuda_on_linuxAfterTargets>CustomBuild</cuda_on_linuxAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <cuda_on_linuxDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(cuda_on_linuxDependsOn)</cuda_on_linuxDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <cuda_on_linux>
+      <CommandLineTemplate>call nvcc &quot;-ccbin&quot; &quot;..\gcc&quot; &quot;-Xcompiler&quot; &quot;-fpic&quot; &quot;-c&quot; &quot;-o&quot; &quot;$(IntDir)%(Filename).o&quot; &quot;%(Identity)&quot;</CommandLineTemplate>
+      <Outputs>$(IntDir)%(Filename).o</Outputs>
+      <ExecutionDescription>compile cuda file on linux</ExecutionDescription>
+      <AdditionalDependencies>%(Identity)</AdditionalDependencies>
+    </cuda_on_linux>
+  </ItemDefinitionGroup>
+</Project>
